@@ -1,0 +1,124 @@
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'altercation/vim-colors-solarized'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-syntastic/syntastic'
+Plug 'ervandew/supertab'
+
+call plug#end()
+
+syntax enable
+
+set background=dark
+set t_Co=256
+colorscheme solarized
+
+set autoread
+set cursorline  				" highlight current line
+set expandtab
+set hidden
+set history=1000  				" Store a ton of history (default is 20)
+set hlsearch
+set ignorecase "Ignore case in search 
+set incsearch
+set nu  "Line numbering
+set pastetoggle=<F2>
+set path+=.; 
+set shiftwidth=2
+set showmatch
+set showmode                   	" display the current mode
+set smartcase "Unless caps are used
+set softtabstop=2
+set spell 		 	        	" spell checking on
+set tabstop=2
+set tags=tags;/
+set ttyfast
+set virtualedit=onemore 	   	" allow for cursor beyond last character
+set backspace=indent,eol,start
+
+:nmap ; :
+
+filetype plugin indent on
+
+" Powerline
+" let g:Powerline_symbols = 'fancy'
+
+"Highlighting text past 80 characters"
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
+" Eliminating tabs
+syn match tab display "\t"
+hi link tab Error
+
+" Command line information
+if has('cmdline_info')
+	set ruler                  	" show the ruler
+	set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+	set showcmd                	" show partial commands in status line and
+endif
+
+" Statusline
+if has('statusline')
+  set laststatus=2
+  " Broken down into easily includeable segments
+  set statusline=%<%f\    " Filename
+  "set statusline+=%w%h%m%r " Options
+  "set statusline+=%{fugitive#statusline()} "  Git Hotness
+  "set statusline+=\ [%{&ff}/%Y]            " filetype
+  "set statusline+=\ [%{getcwd()}]          " current dir
+  "set statusline+=\ [A=\%03.3b/H=\%02.2B] " ASCII / Hexadecimal value of char
+  "set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+endif
+
+"Syntastic fixes
+
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': ['python', 'php', 'c++'], 'passive_filetypes': [] }
+" let g:pymode_lint_message = 0
+
+" Remap arrows to split navigation
+nnoremap <Right> <C-w>l
+nnoremap <Left> <C-w>h
+nnoremap <Up> <C-w>k
+nnoremap <Down> <C-w>j
+
+" Pop Ggrep into a quickfix
+autocmd QuickFixCmdPost *grep* cwindow
+
+set shell=zsh
+
+" GoLang
+filetype off
+filetype plugin indent off
+set runtimepath+=$GOROOT/misc/vim
+set runtimepath+=$GOPATH/src/github.com/golang/lint/misc/vim
+filetype plugin indent on
+syntax on
+
+" Latex
+let g:tex_flavor = "latex"
+let g:Tex_DefaultTargetFormat='pdf'
+let g:Tex_ViewRule_pdf = 'Preview' 
+
+" Rust
+filetype off
+filetype plugin indent off
+set runtimepath+=$RUSTPATH/src/etc/vim
+filetype plugin indent on
+syntax on
+
+set completeopt-=preview
+let g:SuperTabDefaultCompletionType = "context"
+
+" AutoCompletion
+" let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
+" autocmd FileType *
+"   \ if &omnifunc != '' |
+"   \   call SuperTabChain(&omnifunc, '<c-p>') |
+"   \ endif

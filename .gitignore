@@ -1,0 +1,7 @@
+# Ignore plugins themselves
+.vim/plugged/
+
+# and swap files
+*.swp
+*~
+.netrwhist
